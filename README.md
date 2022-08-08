@@ -78,7 +78,7 @@ In `shards.yml`
 ```yml
 dependencies:
   clear:
-    github: anykeyh/clear
+    github: fujikawahiroaki/clear
     branch: master
 ```
 
