@@ -5,12 +5,12 @@ class <%= opts["model_class"] %>
 
   self.table = "<%= opts["model_table"] %>"
 
-  with_serial_pkey
+  primary_key
 
   <%- opts["model_fields"].split("|").reject(&.empty?).each do |f| -%>
   <%- name, type = f.split(":").map(&.underscore) -%>
   <%- type ||= "string" -%>
-  column <%=name%> : <%=type.camelcase%>
+  column <%=name%> : <%=type == "uuid" ? "UUID" : type.camelcase%>
   <%- end -%>
 
   timestamps

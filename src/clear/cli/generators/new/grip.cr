@@ -1,7 +1,7 @@
 require "generate"
 
 class Clear::CLI::Generator
-  register_sub_command "new:kemal", type: NewGrip, description: "Create a new project with Grip"
+  register_sub_command "new:grip", type: NewGrip, description: "Create a new project with Grip"
 
   class NewGrip < Admiral::Command
     include Clear::CLI::Command
@@ -27,13 +27,13 @@ class Clear::CLI::Generator
       g["git_email"] = `git config user.name`.chomp || "Your Name"
 
       g.in_directory "bin" do
-        g.file "appctl", Clear::CLI::Generator.ecr_to_s("#{__DIR__}/../../../../../templates/kemal/bin/appctl.ecr", g)
-        g.file "clear_cli.cr", Clear::CLI::Generator.ecr_to_s("#{__DIR__}/../../../../../templates/kemal/bin/clear_cli.cr.ecr", g)
-        g.file "server.cr", Clear::CLI::Generator.ecr_to_s("#{__DIR__}/../../../../../templates/kemal/bin/server.cr.ecr", g)
+        g.file "appctl", Clear::CLI::Generator.ecr_to_s("#{__DIR__}/../../../../../templates/grip/bin/appctl.ecr", g)
+        g.file "clear_cli.cr", Clear::CLI::Generator.ecr_to_s("#{__DIR__}/../../../../../templates/grip/bin/clear_cli.cr.ecr", g)
+        g.file "server.cr", Clear::CLI::Generator.ecr_to_s("#{__DIR__}/../../../../../templates/grip/bin/server.cr.ecr", g)
       end
 
       g.in_directory "config" do
-        g.file "database.yml", Clear::CLI::Generator.ecr_to_s("#{__DIR__}/../../../../../templates/kemal/config/database.yml.ecr", g)
+        g.file "database.yml", Clear::CLI::Generator.ecr_to_s("#{__DIR__}/../../../../../templates/grip/config/database.yml.ecr", g)
       end
 
       g.in_directory "src" do
@@ -41,18 +41,18 @@ class Clear::CLI::Generator
         end
 
         g.in_directory "db" do
-          g.file "init.cr", Clear::CLI::Generator.ecr_to_s("#{__DIR__}/../../../../../templates/kemal/src/db/init.ecr", g)
+          g.file "init.cr", Clear::CLI::Generator.ecr_to_s("#{__DIR__}/../../../../../templates/grip/src/db/init.ecr", g)
         end
 
         g.in_directory "models" do
-          g.file "init.cr", Clear::CLI::Generator.ecr_to_s("#{__DIR__}/../../../../../templates/kemal/src/models/application_model.ecr", g)
+          g.file "init.cr", Clear::CLI::Generator.ecr_to_s("#{__DIR__}/../../../../../templates/grip/src/models/application_model.ecr", g)
         end
 
-        g.file "app.cr", Clear::CLI::Generator.ecr_to_s("#{__DIR__}/../../../../../templates/kemal/src/app.ecr", g)
+        g.file "app.cr", Clear::CLI::Generator.ecr_to_s("#{__DIR__}/../../../../../templates/grip/src/app.ecr", g)
       end
 
-      g.file ".gitignore", Clear::CLI::Generator.ecr_to_s("#{__DIR__}/../../../../../templates/kemal/_gitignore.ecr", g)
-      g.file "shard.yml", Clear::CLI::Generator.ecr_to_s("#{__DIR__}/../../../../../templates/kemal/shard.yml.ecr", g)
+      g.file ".gitignore", Clear::CLI::Generator.ecr_to_s("#{__DIR__}/../../../../../templates/grip/_gitignore.ecr", g)
+      g.file "shard.yml", Clear::CLI::Generator.ecr_to_s("#{__DIR__}/../../../../../templates/grip/shard.yml.ecr", g)
 
       system("chmod +x #{g.target_directory}/bin/appctl")
       system("cd #{g.target_directory} && shards")
@@ -62,7 +62,7 @@ class Clear::CLI::Generator
   end
 end
 
-# Clear::CLI::Generator.add("new/kemal",
-#   "Setup a minimal application with kemal and clear") do |args|
+# Clear::CLI::Generator.add("new/grip",
+#   "Setup a minimal application with grip and clear") do |args|
 
 # end

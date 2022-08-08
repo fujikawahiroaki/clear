@@ -1,6 +1,7 @@
 require "grip"
 require "clear"
 require "yaml"
+require "json"
 
 module Application
   class_property env : String = ENV.fetch("CRYSTAL_ENV", "development")
@@ -14,9 +15,8 @@ module Application
   end
 end
 
-Clear.log.level = ::Log::Severity::Debug if Application.env == "development"
+Clear::Log.level = ::Log::Severity::Debug if Application.env == "development"
 
 require "./db/init.cr"
 
-require "./views/**"
 require "./**"

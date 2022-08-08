@@ -1,5 +1,5 @@
 require "clear"
-require "../../src/models/**"
+require "../../models/**"
 
 class Create<%= opts["model_class"] %><%= opts["migration_uid"] %>
   include Clear::Migration
@@ -14,7 +14,7 @@ class Create<%= opts["model_class"] %><%= opts["migration_uid"] %>
         <%- if type == "references" -%>
       t.references to: "<%= name %>", on_delete: "restrict", null: nullable
         <%- else -%>
-      t.<%= type %> :<%= name %>, null: <%=nullable ? "true" : "false"%>
+          t.column :<%= name %>, "<%= type %>", null: <%=nullable ? "true" : "false"%>
         <%- end -%>
       <%- end -%>
 

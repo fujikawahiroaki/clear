@@ -25,6 +25,7 @@ module Clear
       define_help
 
       register_sub_command generate, type: Clear::CLI::Generator
+      register_sub_command migrate, type: Clear::CLI::Migration
 
       def run_impl
         STDOUT.puts help
