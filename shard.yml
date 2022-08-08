@@ -27,6 +27,12 @@ dependencies:
   inflector:
     github: anykeyh/inflector.cr
     branch: master
+  dotenv:
+    github: drum445/dotenv
+  logger:
+    github: crystal-lang/logger.cr
+  micrate:
+    github: amberframework/micrate
 
 development_dependencies:
   ameba:

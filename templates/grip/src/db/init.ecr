@@ -1,3 +1,6 @@
+require "clear"
+require "./migrations/*"
+
 # Initialize Clear with the database.yml file
 CLEAR_DB_CONFIG = YAML.parse(File.read("./config/database.yml"))[Application.env]
 
