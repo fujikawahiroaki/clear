@@ -1,0 +1,20 @@
+name: <%= opts["app_name_underscore"] %>
+version: 0.1.0
+
+authors:
+  - <%= opts["git_username"] %> <<%= opts["git_email"] %>>
+
+description: |
+  This is a short description of <%=opts["app_name_camelcase"]%>
+
+dependencies:
+  grip:
+    github: grip-framework/grip
+  dotenv:
+    github: drum445/dotenv
+  clear:
+    github: fujikawahiroaki/clear
+
+development_dependencies:
+  sentry:
+    github: samueleaton/sentry
