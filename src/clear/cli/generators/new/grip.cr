@@ -51,6 +51,7 @@ class Clear::CLI::Generator
         g.file "app.cr", Clear::CLI::Generator.ecr_to_s("#{__DIR__}/../../../../../templates/grip/src/app.ecr", g)
       end
 
+      g.file "clear_migrate.cr", Clear::CLI::Generator.ecr_to_s("#{__DIR__}/../../../../../templates/grip/clear_migrate.cr", g)
       g.file ".gitignore", Clear::CLI::Generator.ecr_to_s("#{__DIR__}/../../../../../templates/grip/_gitignore.ecr", g)
       g.file "shard.yml", Clear::CLI::Generator.ecr_to_s("#{__DIR__}/../../../../../templates/grip/shard.yml.ecr", g)
 

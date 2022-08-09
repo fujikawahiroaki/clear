@@ -1,21 +1,15 @@
-require "pg"
-require "micrate"
+require "clear"
 require "dotenv"
+require "admiral"
+require "./src/db/**"
 
 Dotenv.load
-DATABASE_URL = ENV["DATABASE_URL"]
 
-class Clear::CLI::Migration < Admiral::Command
-  include Clear::CLI::Command
-
-  define_help description: "Manage migration state of your database"
-
+class ClearMigrate < Admiral::Command
   class Status < Admiral::Command
-    include Clear::CLI::Command
-
     define_help description: "Return the current state of the database"
-
-    def run_impl
+    
+    def run 
       begin
         Clear::SQL.init(DATABASE_URL)
       rescue DB::ConnectionRefused
@@ -25,13 +19,10 @@ class Clear::CLI::Migration < Admiral::Command
       puts Clear::Migration::Manager.instance.print_status
     end
   end
-
+ 
   class Seed < Admiral::Command
-    include Clear::CLI::Command
-
     define_help description: "Call the seeds data"
-
-    def run_impl
+    def run
       begin
         Clear::SQL.init(DATABASE_URL)
       rescue DB::ConnectionRefused
@@ -42,65 +33,11 @@ class Clear::CLI::Migration < Admiral::Command
     end
   end
 
-  class Create < Admiral::Command
-    include Clear::CLI::Command
-
-    private def create_db_and_init
-      Dotenv.load
-      Micrate::DB.connection_url = ENV["DATABASE_CREATE_URL"]
-      url = DATABASE_URL
-      name = set_database_to_schema url
-      Micrate::DB.connect do |db|
-        db.exec "CREATE DATABASE #{name};"
-      end
-      puts "Created database #{name}"
-      begin
-        Clear::SQL.init(DATABASE_URL)
-      rescue DB::ConnectionRefused
-        puts "FATAL: Connection to the database (#{DATABASE_URL}) has been refused"
-        exit
-      end
-    end
-
-    private def set_database_to_schema(url)
-      uri = URI.parse(url)
-      if path = uri.path
-        Micrate::DB.connection_url = url.gsub(path, "/#{uri.scheme}")
-        uri.path.gsub("/", "")
-      else
-        puts "Could not determine database name"
-        exit
-      end
-    end
-    define_help description: "Create database"
-    
-    def run_impl
-      self.create_db_and_init
-    end
-  end
-
-  class Delete < Admiral::Command
-    include Clear::CLI::Command
-    define_help description: "Delete database"
-
-    def run_impl
-      puts "This command not woking now"
-      begin
-        Clear::SQL.init(DATABASE_URL)
-      rescue DB::ConnectionRefused
-        puts "FATAL: Connection to the database (#{DATABASE_URL}) has been refused"
-        exit
-      end
-    end
-  end
-
   class Up < Admiral::Command
-    include Clear::CLI::Command
-
     define_argument migration_number : Int64, required: true
     define_help description: "Upgrade your database to a specific migration version"
 
-    def run_impl
+    def run
       begin
         Clear::SQL.init(DATABASE_URL)
       rescue DB::ConnectionRefused
@@ -112,12 +49,10 @@ class Clear::CLI::Migration < Admiral::Command
   end
 
   class Down < Admiral::Command
-    include Clear::CLI::Command
-
     define_argument migration_number : Int64, required: true
     define_help description: "Downgrade your database to a specific migration version"
 
-    def run_impl 
+    def run 
       begin
         Clear::SQL.init(DATABASE_URL)
       rescue DB::ConnectionRefused
@@ -129,12 +64,10 @@ class Clear::CLI::Migration < Admiral::Command
   end
 
   class Set < Admiral::Command
-    include Clear::CLI::Command
-
     define_flag direction : String, short: d, default: "both"
     define_argument to : Int64, required: true
 
-    def run_impl
+    def run
       dir_symbol = case flags.direction
                    when "up"
                      :up
@@ -158,9 +91,7 @@ class Clear::CLI::Migration < Admiral::Command
   end
 
   class Migrate < Admiral::Command
-    include Clear::CLI::Command
-
-    def run_impl
+    def run
       begin
         Clear::SQL.init(DATABASE_URL)
       rescue DB::ConnectionRefused
@@ -172,12 +103,10 @@ class Clear::CLI::Migration < Admiral::Command
   end
 
   class Rollback < Admiral::Command
-    include Clear::CLI::Command
-
     define_help description: "Rollback the last up migration"
     define_argument num : Int64
 
-    def run_impl
+    def run
       begin
         Clear::SQL.init(DATABASE_URL)
       rescue DB::ConnectionRefused
@@ -208,10 +137,8 @@ class Clear::CLI::Migration < Admiral::Command
   register_sub_command rollback, type: Rollback
   register_sub_command migrate, type: Migrate
   register_sub_command seed, type: Seed
-  register_sub_command create, type: Create
-  #register_sub_command delete type: Delete
 
-  def run_impl
+  def run
       begin
         Clear::SQL.init(DATABASE_URL)
       rescue DB::ConnectionRefused
@@ -221,3 +148,5 @@ class Clear::CLI::Migration < Admiral::Command
     Clear::Migration::Manager.instance.apply_all
   end
 end
+
+ClearMigrate.run
